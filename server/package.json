@@ -1,0 +1,13 @@
+{
+  "name": "medicine-reminder-server",
+  "version": "1.0.0",
+  "description": "Сервер для проекта 'Напоминания о лекарствах'",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
