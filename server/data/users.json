@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1761214489997,
+    "username": "xenia1",
+    "password": "123456"
+  },
+  {
+    "id": 1761215871741,
+    "username": "maya",
+    "password": "123",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc2MTIxNTg3MTc0MSwidXNlcm5hbWUiOiJtYXlhIiwiaWF0IjoxNzYxMjE1OTEyLCJleHAiOjE3NjE4MjA3MTJ9.-ekREW6dBQIL_h44xfW-WzKeuyOfCg7vXalkzk1lccY"
+  }
+]

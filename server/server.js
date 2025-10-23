@@ -1,18 +1,25 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
-const PORT = 3000;
+app.use(cors());
+app.use(express.json());
 
-app.use(express.json()); //позволяет использовать между сервером и клиентом (системами) json строки
-
-//подключаем запросы к пути /api/medicines
+// Подключаем маршруты
 const medicineRoutes = require("./routes/medicineRoutes.js").default || require("./routes/medicineRoutes");
-app.use("/api/medicines", medicineRoutes);
+const authRoutes = require("./routes/authRoutes");
 
-//приветственная страница
+app.use("/api/medicines", medicineRoutes);
+app.use("/api/auth", authRoutes);
+
 app.get("/", (req, res) => {
-  res.send("Проект: Напоминания о лекарствах");
+  res.send("Сервер работает!");
 });
 
-app.listen(PORT, () => {
-  console.log("Сервер запущен: http://localhost:"+PORT);
+
+app.listen(3000, () => {
+  console.log("Сервер запущен: http://localhost:3000");
+  console.log("Registered routes:");
+  console.log("/api/medicines");
+  console.log("/api/auth");
 });
