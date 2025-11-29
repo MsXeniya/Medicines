@@ -1,44 +1,70 @@
 const express = require("express");
+const fs = require("fs");
+const path = require("path");
+
 const router = express.Router();
 
-let medicines = [
-  { id: 1, name: "Антибиотик", time: "13:00", taken: false },
-  { id: 2, name: "Витамин D", time: "15:00", taken: true },
-];
+const medicinesPath = path.join(__dirname, "../data/medicines.json");
 
-//получить все лекарства
+// функция загрузки
+function loadMedicines() {
+  if (fs.existsSync(medicinesPath)) {
+    return JSON.parse(fs.readFileSync(medicinesPath, "utf8"));
+  }
+  return [];
+}
+
+// функция сохранения
+function saveMedicines(data) {
+  fs.writeFileSync(medicinesPath, JSON.stringify(data, null, 2));
+}
+
+// загружаю массив
+let medicines = loadMedicines();
+
+
+// получить все лекарства
 router.get("/", (req, res) => {
   res.json(medicines);
 });
 
-//добавить лекарство
+// добавить лекарство
 router.post("/", (req, res) => {
   const newMedicine = {
-    id: medicines.length + 1,
+    id: Date.now(),
     name: req.body.name,
     time: req.body.time,
     taken: false,
   };
+
   medicines.push(newMedicine);
+  saveMedicines(medicines); 
+
   res.status(201).json(newMedicine);
 });
 
-//отметка"принято"
+// отметить "принято"
 router.put("/:id/take", (req, res) => {
   const id = parseInt(req.params.id);
   const medicine = medicines.find((m) => m.id === id);
-  if (medicine) {
-    medicine.taken = true;
-    res.json(medicine);
-  } else {
-    res.status(404).json({ message: "Лекарство не найдено" });
+
+  if (!medicine) {
+    return res.status(404).json({ message: "Лекарство не найдено" });
   }
+
+  medicine.taken = true;
+  saveMedicines(medicines);
+
+  res.json(medicine);
 });
 
-//удалить
+// удалить
 router.delete("/:id", (req, res) => {
   const id = parseInt(req.params.id);
+
   medicines = medicines.filter((m) => m.id !== id);
+  saveMedicines(medicines); 
+
   res.json({ message: "Удалено" });
 });
 

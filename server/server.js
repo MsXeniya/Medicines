@@ -5,7 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Подключаем маршруты
+//Подключаем маршруты
 const medicineRoutes = require("./routes/medicineRoutes.js").default || require("./routes/medicineRoutes");
 const authRoutes = require("./routes/authRoutes");
 
@@ -17,8 +17,10 @@ app.get("/", (req, res) => {
 });
 
 
-app.listen(3000, () => {
-  console.log("Сервер запущен: http://localhost:3000");
+const PORT = 5000;
+
+app.listen(PORT, () => {
+  console.log(`Сервер запущен: http://localhost:${PORT}`);
   console.log("Registered routes:");
   console.log("/api/medicines");
   console.log("/api/auth");

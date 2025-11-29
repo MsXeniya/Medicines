@@ -1,8 +1,23 @@
 {
+  "name": "medicines",
+  "version": "1.0.0",
+  "description": "Fullstack проект: React + Express",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client-react",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1"
+    "mongoose": "^8.19.1",
+    "react-router-dom": "^7.9.5"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.7"
   }
 }
