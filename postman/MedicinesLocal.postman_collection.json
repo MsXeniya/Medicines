@@ -1,0 +1,406 @@
+{
+  "info": {
+    "name": "Medicines API",
+    "description": "Коллекция для тестирования API приложения Medicines с авторизацией по токенам",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login (xenia1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.accessToken) {",
+                  "  pm.environment.set(\"accessToken\", body.accessToken);",
+                  "  console.log(\"Access token saved\");",
+                  "}",
+                  "if (body.refreshToken) {",
+                  "  pm.environment.set(\"refreshToken\", body.refreshToken);",
+                  "  console.log(\"Refresh token saved\");",
+                  "}",
+                  "",
+                  "pm.test(\"Login successful\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(body.accessToken).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"xenia1\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login (maya)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.accessToken) {",
+                  "  pm.environment.set(\"accessToken\", body.accessToken);",
+                  "  console.log(\" Access token saved\");",
+                  "}",
+                  "if (body.refreshToken) {",
+                  "  pm.environment.set(\"refreshToken\", body.refreshToken);",
+                  "  console.log(\" Refresh token saved\");",
+                  "}",
+                  "",
+                  "pm.test(\"Login successful\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(body.accessToken).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"maya\",\n  \"password\": \"123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.user && body.user.id) {",
+                  "  pm.environment.set(\"userId\", body.user.id);",
+                  "  console.log(\" User ID saved:\", body.user.id);",
+                  "}",
+                  "",
+                  "pm.test(\"Profile retrieved\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(body.user).to.exist;",
+                  "  pm.expect(body.user.username).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.accessToken) {",
+                  "  pm.environment.set(\"accessToken\", body.accessToken);",
+                  "  console.log(\" Access token refreshed\");",
+                  "}",
+                  "",
+                  "pm.test(\"Token refreshed\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(body.accessToken).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Medicines",
+      "item": [
+        {
+          "name": "Get All Medicines (public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const medicines = pm.response.json();",
+                  "console.log(\"Total medicines (public):\", medicines.length);",
+                  "console.log(\"Legacy medicines (no userId):\", medicines.filter(m => !m.userId).length);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/medicines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "medicines"]
+            },
+            "description": "Получить лекарства без авторизации (только legacy-записи без userId)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Medicines (authenticated)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const medicines = pm.response.json();",
+                  "const userId = pm.environment.get(\"userId\");",
+                  "console.log(\"Total medicines (auth):\", medicines.length);",
+                  "console.log(\"My medicines:\", medicines.filter(m => m.userId == userId).length);",
+                  "console.log(\"Legacy medicines:\", medicines.filter(m => !m.userId).length);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/medicines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "medicines"]
+            },
+            "description": "Получить лекарства с авторизацией (legacy + свои записи)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Medicine",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.id) {",
+                  "  pm.environment.set(\"lastMedId\", body.id);",
+                  "  console.log(\"Medicine ID saved:\", body.id);",
+                  "}",
+                  "",
+                  "pm.test(\"Medicine created\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  pm.expect(body.id).to.exist;",
+                  "  pm.expect(body.userId).to.exist;",
+                  "  pm.expect(body.userId).to.equal(parseInt(pm.environment.get(\"userId\")));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Тестовое лекарство\",\n  \"time\": \"10:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/medicines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "medicines"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Medicine as Taken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Medicine marked as taken\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.taken).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/medicines/{{lastMedId}}/take",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "medicines", "{{lastMedId}}", "take"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Medicine",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Medicine deleted\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/medicines/{{lastMedId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "medicines", "{{lastMedId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    }
+  ]
+}

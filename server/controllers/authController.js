@@ -19,9 +19,7 @@ function saveUsers(users) {
   fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
 }
 
-// =======================
-// ✅ Регистрация
-// =======================
+// Регистрация
 exports.register = (req, res) => {
   const { username, password } = req.body;
 
@@ -46,9 +44,7 @@ exports.register = (req, res) => {
   res.json({ message: "Пользователь зарегистрирован", user: newUser });
 };
 
-// =======================
-// ✅ Авторизация
-// =======================
+// Авторизация
 exports.login = (req, res) => {
   const { username, password } = req.body;
 
@@ -69,9 +65,8 @@ exports.login = (req, res) => {
   res.json({ message: "Успешный вход", accessToken, refreshToken });
 };
 
-// =======================
-// ✅ Обновление токена (refresh)
-// =======================
+// Обновление токена (refresh)
+
 exports.refresh = (req, res) => {
   const { refreshToken } = req.body;
 
@@ -94,9 +89,7 @@ exports.refresh = (req, res) => {
   }
 };
 
-// =======================
-// ✅ Удаление пользователя
-// =======================
+// Удаление пользователя
 exports.deleteUser = (req, res) => {
   const id = parseInt(req.params.id);
   let users = loadUsers();
@@ -109,4 +102,18 @@ exports.deleteUser = (req, res) => {
   saveUsers(users);
 
   res.json({ message: "Пользователь удалён" });
+};
+
+// Профиль текущего пользователя
+exports.profile = (req, res) => {
+  const userId = req.user && req.user.id;
+  if (!userId) return res.status(401).json({ message: "Не авторизован" });
+
+  const users = loadUsers();
+  const user = users.find((u) => u.id === userId);
+  if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+
+  // Не возвращаем пароль и refreshToken
+  const { password, refreshToken, ...safeUser } = user;
+  res.json({ user: safeUser });
 };

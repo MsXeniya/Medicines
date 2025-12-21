@@ -1,0 +1,143 @@
+/* Medicine List */
+.medicine-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.add-medicine-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.5s ease;
+}
+
+.add-medicine-card h2 {
+  margin: 0 0 24px 0;
+  color: var(--gray-900);
+  font-size: 20px;
+}
+
+.add-medicine-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.medicines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  animation: slideUp 0.6s ease;
+}
+
+.medicine-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--warning);
+}
+
+.medicine-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.medicine-card.taken {
+  border-left-color: var(--success);
+  background: #f0fdf4;
+}
+
+.medicine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.medicine-name {
+  margin: 0;
+  color: var(--gray-900);
+  font-size: 18px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.medicine-time {
+  margin-bottom: 16px;
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+.medicine-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.medicine-actions .btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: var(--border-radius);
+  color: var(--gray-600);
+}
+
+.empty-state p:first-child {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  font-size: 18px;
+  color: var(--gray-600);
+}
+
+.empty-subtitle {
+  font-size: 14px;
+  color: var(--gray-400);
+}
+
+@media (max-width: 768px) {
+  .add-medicine-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .add-medicine-form .btn {
+    width: 100%;
+  }
+
+  .medicines-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .add-medicine-card {
+    padding: 20px;
+  }
+
+  .add-medicine-card h2 {
+    font-size: 18px;
+  }
+
+  .medicine-card {
+    padding: 16px;
+  }
+
+  .medicine-name {
+    font-size: 16px;
+  }
+}
