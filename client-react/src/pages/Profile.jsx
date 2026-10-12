@@ -2,10 +2,13 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../styles/Profile.css";
+import setSEO from "../utils/useSEO";
 
 export default function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  setSEO({ title: user ? `Profile — ${user.username}` : "Profile", description: user ? `Профиль пользователя ${user.username}` : "Профиль" });
 
   if (!user) {
     navigate("/");
@@ -33,6 +36,18 @@ export default function Profile() {
           <div className="info-item">
             <label>ID пользователя:</label>
             <p className="info-value">{user.id}</p>
+          </div>
+
+          <div className="info-item">
+            <label>Роль:</label>
+            <p className="info-value">{user.role || "user"}</p>
+          </div>
+
+          <div className="info-item">
+            <label>Права:</label>
+            <p className="info-value">
+              {Array.isArray(user.permissions) ? user.permissions.join(", ") : "Нет данных"}
+            </p>
           </div>
         </div>
 

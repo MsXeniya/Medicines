@@ -1,0 +1,120 @@
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: medicines-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - fastapi
+      - backend
+    networks:
+      - medicines-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./client-react
+      dockerfile: Dockerfile
+    container_name: medicines-frontend
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost/api
+    depends_on:
+      - backend
+      - fastapi
+    networks:
+      - medicines-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Express Backend (Legacy)
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: medicines-express
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    volumes:
+      - ./server/data:/app/data
+    networks:
+      - medicines-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # FastAPI Backend
+  fastapi:
+    build:
+      context: ./server-fastapi
+      dockerfile: Dockerfile
+    container_name: medicines-fastapi
+    environment:
+      - PYTHONUNBUFFERED=1
+      - S3_BUCKET=${S3_BUCKET:-medicines}
+      - S3_ENDPOINT_URL=${S3_ENDPOINT_URL:-http://minio:9000}
+      - S3_REGION=${S3_REGION:-us-east-1}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-minioadmin}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-minioadmin}
+      - S3_USE_SSL=${S3_USE_SSL:-false}
+      - SECRET_KEY=${SECRET_KEY:-your-super-secret-key-change-this}
+      - REFRESH_SECRET_KEY=${REFRESH_SECRET_KEY:-your-super-refresh-secret-key-change-this}
+    depends_on:
+      - minio
+    networks:
+      - medicines-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # MinIO S3-compatible storage
+  minio:
+    image: minio/minio:latest
+    container_name: medicines-minio
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio-data:/data
+    networks:
+      - medicines-network
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+networks:
+  medicines-network:
+    driver: bridge
+
+volumes:
+  minio-data:

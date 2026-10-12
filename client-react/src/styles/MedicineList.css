@@ -5,6 +5,24 @@
   gap: 32px;
 }
 
+.filters-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+}
+
+.filters-card h2 {
+  margin-bottom: 16px;
+  color: var(--gray-900);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
 .add-medicine-card {
   background: white;
   border-radius: var(--border-radius);
@@ -85,6 +103,76 @@
   font-size: 13px;
 }
 
+.medicine-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.files-block {
+  border-top: 1px solid var(--gray-200);
+  margin-top: 12px;
+  padding-top: 12px;
+  margin-bottom: 12px;
+}
+
+.files-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.file-upload-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-item {
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.file-name {
+  font-size: 13px;
+  color: var(--gray-700);
+  word-break: break-all;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-block {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
@@ -110,6 +198,10 @@
 }
 
 @media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
   .add-medicine-form {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -121,6 +213,17 @@
 
   .medicines-grid {
     grid-template-columns: 1fr;
+  }
+
+  .file-upload-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination-block {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
   }
 }
 

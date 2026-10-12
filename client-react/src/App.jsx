@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import LoginForm from "./components/LoginForm";
+import RoleRoute from "./components/RoleRoute";
+import AdminPanel from "./pages/AdminPanel";
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -17,6 +19,14 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={!user ? <LoginForm /> : <Navigate to="/" />} />
         <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+        <Route
+          path="/admin"
+          element={
+            <RoleRoute roles={["admin"]}>
+              <AdminPanel />
+            </RoleRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

@@ -7,7 +7,19 @@
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
     "client": "npm start --prefix client-react",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev:frontend": "npm start --prefix client-react",
+    "dev:backend": "c:/Users/Xenia/Desktop/projects/medicines/.venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000 --app-dir %npm_config_local_prefix%/server-fastapi",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "stop:3000": "for /f \"tokens=5\" %a in ('netstat -aon ^| findstr :3000 ^| findstr LISTENING') do taskkill /F /PID %a",
+    "stop:8000": "for /f \"tokens=5\" %a in ('netstat -aon ^| findstr :8000 ^| findstr LISTENING') do taskkill /F /PID %a",
+    "stop:ports": "npm run stop:3000 & npm run stop:8000",
+    "dev:all:clean": "npm run stop:ports & npm run dev:all",
+    "test:backend": "cd server-fastapi && .venv\\Scripts\\python.exe -m pytest tests/ -q",
+    "test:frontend": "cd client-react && npm run test:unit",
+    "test:all": "npm run test:backend && npm run test:frontend",
+    "test:e2e": "cd client-react && npm run test:e2e",
+    "test:all:full": "npm run test:backend && npm run test:frontend && npm run test:e2e"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

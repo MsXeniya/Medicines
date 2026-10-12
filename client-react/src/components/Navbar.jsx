@@ -7,8 +7,8 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/login");
   };
 
@@ -22,10 +22,16 @@ export default function Navbar() {
         <div className="navbar-menu">
           {user ? (
             <>
-              <span className="navbar-user">👤 {user.username}</span>
+              {/* Показываем роль рядом с именем, чтобы пользователю было видно текущие права. */}
+              <span className="navbar-user">👤 {user.username} ({user.role})</span>
               <Link to="/profile" className="nav-link">
                 Профиль
               </Link>
+              {user.role === "admin" && (
+                <Link to="/admin" className="nav-link">
+                  Админ
+                </Link>
+              )}
               <button onClick={handleLogout} className="btn btn-logout">
                 Выход
               </button>
